@@ -1,6 +1,9 @@
+import { updateMainHeading, showAlert } from "./utils.js";
+
 document.addEventListener("DOMContentLoaded", function () {
   const customSelects = document.querySelectorAll(".customSelect");
-  let currentSelectValue = "";
+
+  let currentSelectValue = 0;
 
   customSelects.forEach((customSelect) => {
     const customSelectedItem = customSelect.querySelector(".selected");
@@ -10,11 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     const arrow = customSelect.querySelector(".arrow");
     const originalSelectId = customSelect.getAttribute("id");
+    const mainHeading = document.getElementById("heading1");
     const originalSelect = document.querySelector(
       `select[data-custom='${originalSelectId}']`
     );
-
-    const mainHeading = document.getElementById("heading1");
+    const functions = customSelect.getAttribute("data-function");
 
     customSelectedItem.addEventListener("click", function () {
       customOptions.style.display =
@@ -36,18 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
         customSelectedItem.textContent = text;
         originalSelect.value = value;
 
-        if (originalSelectId === "customSelect1") {
-          let currentMainHeadingText = mainHeading.textContent;
-          currentMainHeadingText = currentMainHeadingText.replace(
-            currentSelectValue,
-            ""
+        if (functions === "updateMainHeading") {
+          updateMainHeading(
+            originalSelectId,
+            value,
+            mainHeading,
+            currentSelectValue
           );
-          currentSelectValue = value;
-          mainHeading.textContent = `${currentMainHeadingText} ${value}`;
-        }
-
-        if (originalSelectId === "customSelect2") {
-          alert(` ${text}`);
+        } else if (functions === "showAlert") {
+          showAlert(originalSelectId, text);
         }
 
         customOptions.style.display = "none";
